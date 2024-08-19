@@ -67,7 +67,7 @@ join_by_index (const RHS_T &rhs, join_policy mp) const  {
         (lhs_idx_s < ThreadPool::MUL_THR_THHOLD) ? 0L : get_thread_level();
 
     if (thread_level > 3)  {
-        std::future<void>   futures[2];
+        hmdf::future<void>   futures[2];
 
         futures[0] = thr_pool_.dispatch(
             false,
@@ -141,7 +141,7 @@ join_by_column (const RHS_T &rhs, const char *name, join_policy mp) const  {
         (lhs_vec_s < ThreadPool::MUL_THR_THHOLD) ? 0L : get_thread_level();
 
     if (thread_level > 3)  {
-        std::future<void>   futures[2];
+        hmdf::future<void>   futures[2];
 
         futures[0] = thr_pool_.dispatch(
             false,

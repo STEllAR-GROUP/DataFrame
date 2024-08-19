@@ -152,7 +152,7 @@ DataFrame<I, H>::shuffle(const StlVecType<const char *> &col_names,
 
     std::random_device  rd;
     std::mt19937        g ((seed != seed_t(-1)) ? seed : rd());
-    std::future<void>   idx_future;
+    hmdf::future<void>   idx_future;
     const auto          thread_level =
         (indices_.size() < ThreadPool::MUL_THR_THHOLD)
             ? 0L : get_thread_level();
@@ -188,7 +188,7 @@ DataFrame<I, H>::shuffle(const StlVecType<const char *> &col_names,
     const SpinGuard             guard (lock_);
 
     if (thread_level > 2)  {
-        std::vector<std::future<void>>  futures;
+        std::vector<hmdf::future<void>>  futures;
 
         futures.reserve(col_names.size());
         for (const auto &name_citer : col_names) [[likely]]
@@ -221,7 +221,7 @@ fill_missing(const StlVecType<const char *> &col_names,
     const auto                      thread_level =
         (indices_.size() < ThreadPool::MUL_THR_THHOLD)
             ? 0L : get_thread_level();
-    StlVecType<std::future<void>>   futures;
+    StlVecType<hmdf::future<void>>   futures;
 
     if (thread_level > 2)
         futures.reserve(count);
@@ -336,7 +336,7 @@ drop_missing(drop_policy policy, size_type threshold)  {
     const auto                      thread_level =
         (indices_.size() < ThreadPool::MUL_THR_THHOLD)
             ? 0L : get_thread_level();
-    std::vector<std::future<void>>  futures;
+    std::vector<hmdf::future<void>>  futures;
 
     if (thread_level > 2)  futures.reserve(num_cols + 1);
 
@@ -433,7 +433,7 @@ replace(const char *col_name, F &functor)  {
 
 template<typename I, typename H>
 template<hashable_equal T>
-std::future<typename DataFrame<I, H>::size_type> DataFrame<I, H>::
+hmdf::future<typename DataFrame<I, H>::size_type> DataFrame<I, H>::
 replace_async(const char *col_name,
               const StlVecType<T> &old_values,
               const StlVecType<T> &new_values,
@@ -453,7 +453,7 @@ replace_async(const char *col_name,
 
 template<typename I, typename H>
 template<typename T, replace_callable<I, T> F>
-std::future<void> DataFrame<I, H>::
+hmdf::future<void> DataFrame<I, H>::
 replace_async(const char *col_name, F &functor)  {
 
     return (thr_pool_.dispatch(true,
@@ -734,7 +734,7 @@ groupby3(const char *col_name1,
 
 template<typename I, typename H>
 template<comparable T, typename I_V, typename ... Ts>
-std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
 DataFrame<I, H>::
 groupby1_async(const char *col_name, I_V &&idx_visitor, Ts&& ... args) const {
 
@@ -753,7 +753,7 @@ groupby1_async(const char *col_name, I_V &&idx_visitor, Ts&& ... args) const {
 
 template<typename I, typename H>
 template<comparable T1, comparable T2, typename I_V, typename ... Ts>
-std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
 DataFrame<I, H>::
 groupby2_async(const char *col_name1,
                const char *col_name2,
@@ -779,7 +779,7 @@ groupby2_async(const char *col_name1,
 template<typename I, typename H>
 template<comparable T1, comparable T2, comparable T3,
          typename I_V, typename ... Ts>
-std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
 DataFrame<I, H>::
 groupby3_async(const char *col_name1,
                const char *col_name2,
@@ -1085,7 +1085,7 @@ DataFrame<I, H>::peaks(const char *col_name, size_type n) const  {
         };
 
     if (thread_level > 2)  {
-		std::vector<std::future<void>>  futures;
+		std::vector<hmdf::future<void>>  futures;
 
         if (n == 1)
             futures = thr_pool_.parallel_loop(n, col_s - n, std::move(lbd1));
@@ -1174,7 +1174,7 @@ DataFrame<I, H>::valleys(const char *col_name, size_type n) const  {
         };
 
     if (thread_level > 2)  {
-		std::vector<std::future<void>>  futures;
+		std::vector<hmdf::future<void>>  futures;
 
         if (n == 1)
             futures = thr_pool_.parallel_loop(n, col_s - n, std::move(lbd1));
@@ -1216,7 +1216,7 @@ bucketize(bucket_type bt,
 
     _bucketize_core_(dst_idx, src_idx, src_idx, value, idx_visitor, idx_s, bt);
 
-    std::vector<std::future<void>>  futures;
+    std::vector<hmdf::future<void>>  futures;
     const auto                      thread_level =
         (indices_.size() < ThreadPool::MUL_THR_THHOLD)
             ? 0L : get_thread_level();
@@ -1241,7 +1241,7 @@ bucketize(bucket_type bt,
 
 template<typename I, typename H>
 template<typename V, typename I_V, typename ... Ts>
-std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
 DataFrame<I, H>::
 bucketize_async(bucket_type bt,
                 const V &value,

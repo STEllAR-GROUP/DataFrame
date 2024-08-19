@@ -1,5 +1,9 @@
 #include <DataFrame/DataFrame.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 using namespace hmdf;
 
 // A DataFrame with ulong index type

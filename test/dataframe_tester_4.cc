@@ -31,6 +31,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/DataFrameTransformVisitors.h>
 #include <DataFrame/RandGen.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <cassert>
 #include <cmath>
 #include <cstdio>

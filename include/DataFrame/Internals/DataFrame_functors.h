@@ -521,7 +521,7 @@ struct  drop_missing_rows_functor_ :
                                        size_type th,
                                        size_type cn,
                                        long tl,
-                                       std::vector<std::future<void>> &futs)
+                                       std::vector<hmdf::future<void>> &futs)
         : missing_row_map(mrm),
           policy(p),
           threshold(th),
@@ -534,7 +534,7 @@ struct  drop_missing_rows_functor_ :
     const size_type                 threshold;
     const size_type                 col_num;
     const long                      thread_level;
-    std::vector<std::future<void>>  &futures;
+    std::vector<hmdf::future<void>>  &futures;
 
     template<typename T>
     void operator() (T &vec);

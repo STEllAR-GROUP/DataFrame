@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/Utils/DateTime.h>
 #include <DataFrame/Utils/FixedSizeString.h>
 #include <DataFrame/Utils/Threads/ThreadGranularity.h>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
 #include <DataFrame/Utils/Utils.h>
 
 #include <algorithm>
@@ -48,7 +49,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <execution>
 #include <fstream>
 #include <functional>
-#include <future>
 #include <ios>
 #include <iterator>
 #include <limits>
@@ -1172,7 +1172,7 @@ public:  // Data manipulation
     //       different columns at the same time with no problem.
     //
     template<hashable_equal T>
-    [[nodiscard]] std::future<size_type>
+    [[nodiscard]] hmdf::future<size_type>
     replace_async(const char *col_name,
                   const StlVecType<T> &old_values,
                   const StlVecType<T> &new_values,
@@ -1208,7 +1208,7 @@ public:  // Data manipulation
     //       different columns at the same time with no problem.
     //
     template<typename T, replace_callable<I, T> F>
-    [[nodiscard]] std::future<void>
+    [[nodiscard]] hmdf::future<void>
     replace_async(const char *col_name, F &functor);
 
     // This does the same thing as replace() above for the index column
@@ -1317,18 +1317,18 @@ public:  // Data manipulation
     // Same as sort() above, but executed asynchronously
     //
     template<typename T, typename ... Ts>
-    [[nodiscard]] std::future<void>
+    [[nodiscard]] hmdf::future<void>
     sort_async(const char *name, sort_spec dir,
                bool ignore_index = false);
 
     template<typename T1, typename T2, typename ... Ts>
-    [[nodiscard]] std::future<void>
+    [[nodiscard]] hmdf::future<void>
     sort_async(const char *name1, sort_spec dir1,
                const char *name2, sort_spec dir2,
                bool ignore_index = false);
 
     template<typename T1, typename T2, typename T3, typename ... Ts>
-    [[nodiscard]] std::future<void>
+    [[nodiscard]] hmdf::future<void>
     sort_async(const char *name1, sort_spec dir1,
                const char *name2, sort_spec dir2,
                const char *name3, sort_spec dir3,
@@ -1336,7 +1336,7 @@ public:  // Data manipulation
 
     template<typename T1, typename T2, typename T3, typename T4,
              typename ... Ts>
-    [[nodiscard]] std::future<void>
+    [[nodiscard]] hmdf::future<void>
     sort_async(const char *name1, sort_spec dir1,
                const char *name2, sort_spec dir2,
                const char *name3, sort_spec dir3,
@@ -1345,7 +1345,7 @@ public:  // Data manipulation
 
     template<typename T1, typename T2, typename T3, typename T4, typename T5,
              typename ... Ts>
-    [[nodiscard]] std::future<void>
+    [[nodiscard]] hmdf::future<void>
     sort_async(const char *name1, sort_spec dir1,
                const char *name2, sort_spec dir2,
                const char *name3, sort_spec dir3,
@@ -1449,7 +1449,7 @@ public:  // Data manipulation
     //
     template<comparable T, typename I_V, typename ... Ts>
     [[nodiscard]]
-    std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+    hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
     groupby1_async(const char *col_name,
                    I_V &&idx_visitor,
                    Ts&& ... args) const;
@@ -1458,7 +1458,7 @@ public:  // Data manipulation
     //
     template<comparable T1, comparable T2, typename I_V, typename ... Ts>
     [[nodiscard]]
-    std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+    hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
     groupby2_async(const char *col_name1,
                    const char *col_name2,
                    I_V &&idx_visitor,
@@ -1469,7 +1469,7 @@ public:  // Data manipulation
     template<comparable T1, comparable T2, comparable T3,
              typename I_V, typename ... Ts>
     [[nodiscard]]
-    std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+    hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
     groupby3_async(const char *col_name1,
                    const char *col_name2,
                    const char *col_name3,
@@ -1679,7 +1679,7 @@ public:  // Data manipulation
     //
     template<typename V, typename I_V, typename ... Ts>
     [[nodiscard]]
-    std::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
+    hmdf::future<DataFrame<I, HeteroVector<std::size_t(H::align_value)>>>
     bucketize_async(bucket_type bt,
                     const V &value,
                     I_V &&idx_visitor,
@@ -3726,11 +3726,11 @@ public:  // Visitors
     //       column or different columns at the same time
     //
     template<typename T, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name, V &visitor, bool in_reverse = false);
 
     template<typename T, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name, V &visitor, bool in_reverse = false) const;
 
     // It passes the values of each index and the two named columns to the
@@ -3771,12 +3771,12 @@ public:  // Visitors
     //       column or different columns at the same time
     //
     template<typename T1, typename T2, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1, const char *name2, V &visitor,
                 bool in_reverse = false);
 
     template<typename T1, typename T2, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1, const char *name2, V &visitor,
                 bool in_reverse = false) const;
 
@@ -3825,7 +3825,7 @@ public:  // Visitors
     //       column or different columns at the same time
     //
     template<typename T1, typename T2, typename T3, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1,
                 const char *name2,
                 const char *name3,
@@ -3833,7 +3833,7 @@ public:  // Visitors
                 bool in_reverse = false);
 
     template<typename T1, typename T2, typename T3, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1,
                 const char *name2,
                 const char *name3,
@@ -3894,7 +3894,7 @@ public:  // Visitors
     //       column or different columns at the same time
     //
     template<typename T1, typename T2, typename T3, typename T4, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1,
                 const char *name2,
                 const char *name3,
@@ -3903,7 +3903,7 @@ public:  // Visitors
                 bool in_reverse = false);
 
     template<typename T1, typename T2, typename T3, typename T4, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1,
                 const char *name2,
                 const char *name3,
@@ -3974,7 +3974,7 @@ public:  // Visitors
     //
     template<typename T1, typename T2, typename T3, typename T4, typename T5,
              typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1,
                 const char *name2,
                 const char *name3,
@@ -3985,7 +3985,7 @@ public:  // Visitors
 
     template<typename T1, typename T2, typename T3, typename T4, typename T5,
              typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     visit_async(const char *name1,
                 const char *name2,
                 const char *name3,
@@ -4029,13 +4029,13 @@ public:  // Visitors
     //       the same column or different columns at the same time
     //
     template<typename T1, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name,
                            V &visitor,
                            bool in_reverse = false);
 
     template<typename T1, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name,
                            V &visitor,
                            bool in_reverse = false) const;
@@ -4084,14 +4084,14 @@ public:  // Visitors
     //       the same column or different columns at the same time
     //
     template<typename T1, typename T2, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            V &visitor,
                            bool in_reverse = false);
 
     template<typename T1, typename T2, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            V &visitor,
@@ -4147,7 +4147,7 @@ public:  // Visitors
     //       the same column or different columns at the same time
     //
     template<typename T1, typename T2, typename T3, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            const char *name3,
@@ -4155,7 +4155,7 @@ public:  // Visitors
                            bool in_reverse = false);
 
     template<typename T1, typename T2, typename T3, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            const char *name3,
@@ -4218,7 +4218,7 @@ public:  // Visitors
     //       the same column or different columns at the same time
     //
     template<typename T1, typename T2, typename T3, typename T4, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            const char *name3,
@@ -4227,7 +4227,7 @@ public:  // Visitors
                            bool in_reverse = false);
 
     template<typename T1, typename T2, typename T3, typename T4, typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            const char *name3,
@@ -4300,7 +4300,7 @@ public:  // Visitors
     //
     template<typename T1, typename T2, typename T3, typename T4, typename T5,
              typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            const char *name3,
@@ -4311,7 +4311,7 @@ public:  // Visitors
 
     template<typename T1, typename T2, typename T3, typename T4, typename T5,
              typename V>
-    [[nodiscard]] std::future<V &>
+    [[nodiscard]] hmdf::future<V &>
     single_act_visit_async(const char *name1,
                            const char *name2,
                            const char *name3,
@@ -4542,7 +4542,7 @@ public:  // Reading and writing
     // Same as write() above, but executed asynchronously
     //
     template<typename S, typename ... Ts>
-    [[nodiscard]] std::future<bool>
+    [[nodiscard]] hmdf::future<bool>
     write_async(S &o,
                 io_format iof = io_format::csv,
                 std::streamsize precision = 12,
@@ -4550,7 +4550,7 @@ public:  // Reading and writing
                 long max_recs = std::numeric_limits<long>::max()) const;
 
     template<typename ... Ts>
-    [[nodiscard]] std::future<bool>
+    [[nodiscard]] hmdf::future<bool>
     write_async(const char *file_name,
                 io_format iof = io_format::csv,
                 std::streamsize precision = 12,
@@ -4584,7 +4584,7 @@ public:  // Reading and writing
     // Same as to_string() above, but executed asynchronously
     //
     template<typename ... Ts>
-    [[nodiscard]] std::future<std::string>
+    [[nodiscard]] hmdf::future<std::string>
     to_string_async(std::streamsize precision = 12) const;
 
     // This is similar to to_string() to serialize a DataFrame into a binary
@@ -4616,7 +4616,7 @@ public:  // Reading and writing
     // Same as serialize() above, but executed asynchronously
     //
     template<typename ... Ts>
-    [[nodiscard]] std::future<std::string>
+    [[nodiscard]] hmdf::future<std::string>
     serialize_async() const;
 
     // This is similar to to_string() to serialize a DataFrame into a binary
@@ -4677,7 +4677,7 @@ public:  // Reading and writing
 
     // Same as read() above, but executed asynchronously
     //
-    [[nodiscard]] std::future<bool>
+    [[nodiscard]] hmdf::future<bool>
     read_async(const char *file_name,
                io_format iof = io_format::csv,
                bool columns_only = false,
@@ -4685,7 +4685,7 @@ public:  // Reading and writing
                size_type num_rows = std::numeric_limits<size_type>::max());
 
     template<typename S>
-    [[nodiscard]] std::future<bool>
+    [[nodiscard]] hmdf::future<bool>
     read_async(S &in_s,
                io_format iof = io_format::csv,
                bool columns_only = false,
@@ -4715,7 +4715,7 @@ public:  // Reading and writing
 
     // Same as from_string() above, but executed asynchronously
     //
-    [[nodiscard]] std::future<bool>
+    [[nodiscard]] hmdf::future<bool>
     from_string_async(const char *data_frame);
 
     // This is a convenient function (conceptually similar to from_string())
@@ -4742,7 +4742,7 @@ public:  // Reading and writing
 
     // Same as deserialize() above, but executed asynchronously
     //
-    [[nodiscard]] std::future<bool>
+    [[nodiscard]] hmdf::future<bool>
     deserialize_async(const std::string &data_frame);
 
 private:

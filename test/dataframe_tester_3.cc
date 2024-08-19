@@ -31,6 +31,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/DataFrameTransformVisitors.h>
 #include <DataFrame/RandGen.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <cassert>
 #include <cstdio>
 #include <iostream>
@@ -260,7 +264,7 @@ static void test_to_from_string()  {
         df.get_view<double, int, std::string>(
             { "col_1", "col_2", "col_3", "col_4", "str_col" });
 
-    std::future<std::string>    f =
+    hmdf::future<std::string>    f =
         df.to_string_async<double, int, std::string>();
     const std::string           str_dump = f.get();
     const std::string           str_dump_from_vw =
@@ -300,13 +304,13 @@ static void test_serialize()  {
                  std::make_pair("col_4", i1),
                  std::make_pair("str_col", strvec));
 
-    std::future<std::string>    ser_fut =
+    hmdf::future<std::string>    ser_fut =
         df.serialize_async<double, int, std::string>();
     const std::string           ser = ser_fut.get();
 
     MyDataFrame df2;
 
-    std::future<bool>   deser_fut = df2.deserialize_async(ser);
+    hmdf::future<bool>   deser_fut = df2.deserialize_async(ser);
 
     deser_fut.get();
     assert((df.is_equal<double, int, std::string>(df2)));
@@ -2339,7 +2343,7 @@ static void test_PriceVolumeTrendVisitor()  {
 
         pvt_v<double, std::string, 64>  pvt;
 
-        std::future<pvt_v<double, std::string, 64> &>   fut =
+        hmdf::future<pvt_v<double, std::string, 64> &>   fut =
             df.single_act_visit_async<double, long>
             ("IBM_Close", "IBM_Volume", pvt);
 

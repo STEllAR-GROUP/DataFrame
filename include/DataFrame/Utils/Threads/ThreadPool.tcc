@@ -28,6 +28,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <DataFrame/Utils/Threads/ThreadPool.h>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
 
 // ----------------------------------------------------------------------------
 
@@ -116,7 +117,7 @@ ThreadPool::dispatch(bool immediately, F &&routine, As && ... args)  {
     using future_t = dispatch_res_t<F, As ...>;
 
     auto            callable  {
-        std::make_shared<std::packaged_task<task_return_t()>>
+        std::make_shared<hmdf::packaged_task<task_return_t()>>
             (std::bind<task_return_t>(std::forward<F>(routine),
                                       std::forward<As>(args) ...))
     };
@@ -150,7 +151,7 @@ ThreadPool::parallel_loop(I begin, I end, F &&routine, As && ... args)  {
                              std::decay_t<I>,
                              std::decay_t<I>,
                              std::decay_t<As> ...>;
-    using future_t = std::future<task_return_t>;
+    using future_t = hmdf::future<task_return_t>;
 
     size_type   n { 0 };
 
@@ -203,7 +204,7 @@ ThreadPool::parallel_loop2(I1 begin1, I1 end1, I2 begin2, I2 end2,
                              std::decay_t<I1>,
                              std::decay_t<I2>,
                              std::decay_t<As> ...>;
-    using future_t = std::future<task_return_t>;
+    using future_t = hmdf::future<task_return_t>;
 
     size_type   n { 0 };
 
@@ -265,7 +266,7 @@ void
 ThreadPool::parallel_sort(const I begin, const I end, P compare)  {
 
     using value_type = typename std::iterator_traits<I>::value_type;
-    using fut_type = std::future<void>;
+    using fut_type = hmdf::future<void>;
 
     if (begin >= end) return;
 
@@ -320,11 +321,11 @@ ThreadPool::parallel_sort(const I begin, const I end, P compare)  {
 
             if (do_left)
                 while (left_fut.wait_for(std::chrono::seconds(0)) ==
-                           std::future_status::timeout)
+                           hmdf::future_status::timeout)
                     run_task();
             if (do_right)
                 while (right_fut.wait_for(std::chrono::seconds(0)) ==
-                           std::future_status::timeout)
+                           hmdf::future_status::timeout)
                     run_task();
         }
         else  {

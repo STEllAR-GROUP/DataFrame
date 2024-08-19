@@ -29,6 +29,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/DataFrameStatsVisitors.h>
 #include <DataFrame/RandGen.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <chrono>
 #include <iostream>
 
@@ -36,8 +40,8 @@ using namespace hmdf;
 using namespace std::chrono;
 
 constexpr std::size_t   ALIGNMENT = 64;
-constexpr std::size_t   SIZE = 300000000;
-// constexpr std::size_t   SIZE = 10000000;
+constexpr std::size_t   DF_SIZE = 300000000;
+// constexpr std::size_t   DF_SIZE = 10000000;
 
 typedef StdDataFrame64<time_t> MyDataFrame;
 
@@ -51,10 +55,10 @@ int main(int, char *[]) {
     MyDataFrame df;
 
     df.load_data(
-        MyDataFrame::gen_sequence_index(0, SIZE, 1),
-        std::make_pair("normal", gen_normal_dist<double, ALIGNMENT>(SIZE)),
-        std::make_pair("log_normal", gen_lognormal_dist<double, ALIGNMENT>(SIZE)),
-        std::make_pair("exponential", gen_exponential_dist<double, ALIGNMENT>(SIZE)));
+        MyDataFrame::gen_sequence_index(0, DF_SIZE, 1),
+        std::make_pair("normal", gen_normal_dist<double, ALIGNMENT>(DF_SIZE)),
+        std::make_pair("log_normal", gen_lognormal_dist<double, ALIGNMENT>(DF_SIZE)),
+        std::make_pair("exponential", gen_exponential_dist<double, ALIGNMENT>(DF_SIZE)));
 
     const auto  second = high_resolution_clock::now();
 

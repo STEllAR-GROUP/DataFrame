@@ -29,9 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
-#include <condition_variable>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
+
 #include <deque>
-#include <mutex>
 #include <optional>
 #include <queue>
 #include <chrono>
@@ -71,10 +71,10 @@ public:
 private:
 
     using QueueType = std::queue<value_type, std::deque<value_type>>;
-    using AutoLockable = std::lock_guard<std::mutex>;
+    using AutoLockable = std::lock_guard<hmdf::mutex>;
 
-    mutable std::mutex              mutex_ { };
-    mutable std::condition_variable cvx_ { };
+    mutable hmdf::mutex              mutex_ { };
+    mutable hmdf::condition_variable cvx_ { };
     QueueType                       queue_ { };
 };
 

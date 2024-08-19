@@ -1,5 +1,9 @@
 #include <DataFrame/DataFrame.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -18,11 +22,11 @@ static void test_thread_safety()  {
 
     MyDataFrame::set_lock(&lock);
 
-    std::vector<std::thread>    thr_vec;
+    std::vector<hmdf::thread>    thr_vec;
 
     std::cout << "* starting threads ..." << std::endl;
     for (size_t i = 0; i < thread_count; ++i)
-        thr_vec.push_back(std::thread([]() {
+        thr_vec.push_back(hmdf::thread([]() {
             constexpr size_t        jobs_per_thread = 2500;
             constexpr unsigned long vec_len = 100;
 

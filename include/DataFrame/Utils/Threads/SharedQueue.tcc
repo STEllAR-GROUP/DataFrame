@@ -54,7 +54,7 @@ inline typename SharedQueue<T>::optional_ret
 SharedQueue<T>::pop_front(bool wait_on_front) noexcept  {
 
     optional_ret                    ret { };
-    std::unique_lock<std::mutex>    ul { mutex_ };
+    std::unique_lock<hmdf::mutex>    ul { mutex_ };
 
     if (queue_.empty() && wait_on_front)
         cvx_.wait_for(ul, 2s);

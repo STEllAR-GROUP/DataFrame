@@ -558,7 +558,7 @@ join_helper_common_(
 
     using res_t = decltype(result);
 
-    std::vector<std::future<void>>  futures;
+    std::vector<hmdf::future<void>>  futures;
     const auto                      thread_level =
         (lhs.indices_.size() < ThreadPool::MUL_THR_THHOLD)
             ? 0L : get_thread_level();

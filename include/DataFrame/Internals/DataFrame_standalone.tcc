@@ -32,12 +32,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/Utils/DateTime.h>
 #include <DataFrame/Utils/Endianness.h>
 #include <DataFrame/Utils/Threads/ThreadGranularity.h>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
 
 #include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include <future>
 #include <iostream>
 #include <map>
 #include <ranges>
@@ -537,7 +537,7 @@ _load_bucket_data_(const DF &source,
                    const I &value,
                    bucket_type bt,
                    T &triple,
-                   std::vector<std::future<void>> &futures) {
+                   std::vector<hmdf::future<void>> &futures) {
 
     using ValueType = typename std::tuple_element<2, T>::type::value_type;
 
@@ -1679,7 +1679,7 @@ _inv_merge_sort_(Con &original,
                Comp comp,
                long thread_level)  {
 
-    using fut_type = std::future<std::size_t>;
+    using fut_type = hmdf::future<std::size_t>;
 
     std::size_t mid { 0 };
     std::size_t inv_count { 0 };

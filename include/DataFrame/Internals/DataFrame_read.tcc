@@ -1630,7 +1630,7 @@ DataFrame<I, H>::deserialize (const std::string &data_frame)  {
 // ----------------------------------------------------------------------------
 
 template<typename I, typename H>
-std::future<bool> DataFrame<I, H>::
+hmdf::future<bool> DataFrame<I, H>::
 read_async(const char *file_name,
            io_format iof,
            bool columns_only,
@@ -1657,7 +1657,7 @@ read_async(const char *file_name,
 
 template<typename I, typename H>
 template<typename S>
-std::future<bool> DataFrame<I, H>::
+hmdf::future<bool> DataFrame<I, H>::
 read_async(S &in_s,
            io_format iof,
            bool columns_only,
@@ -1683,7 +1683,7 @@ read_async(S &in_s,
 // ----------------------------------------------------------------------------
 
 template<typename I, typename H>
-std::future<bool>
+hmdf::future<bool>
 DataFrame<I, H>::from_string_async(const char *data_frame)  {
 
     return (thr_pool_.dispatch(true,
@@ -1696,7 +1696,7 @@ DataFrame<I, H>::from_string_async(const char *data_frame)  {
 // ----------------------------------------------------------------------------
 
 template<typename I, typename H>
-std::future<bool>
+hmdf::future<bool>
 DataFrame<I, H>::deserialize_async(const std::string &data_frame)  {
 
     return (thr_pool_.dispatch(true,

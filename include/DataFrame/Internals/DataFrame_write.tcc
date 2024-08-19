@@ -249,7 +249,7 @@ write(S &o,
 
 template<typename I, typename H>
 template<typename ... Ts>
-std::future<bool> DataFrame<I, H>::
+hmdf::future<bool> DataFrame<I, H>::
 write_async (const char *file_name,
              io_format iof,
              std::streamsize precision,
@@ -276,7 +276,7 @@ write_async (const char *file_name,
 
 template<typename I, typename H>
 template<typename S, typename ... Ts>
-std::future<bool> DataFrame<I, H>::
+hmdf::future<bool> DataFrame<I, H>::
 write_async (S &o,
              io_format iof,
              std::streamsize precision,
@@ -303,7 +303,7 @@ write_async (S &o,
 
 template<typename I, typename H>
 template<typename ... Ts>
-std::future<std::string> DataFrame<I, H>::
+hmdf::future<std::string> DataFrame<I, H>::
 to_string_async (std::streamsize precision) const  {
 
     return (thr_pool_.dispatch(true,
@@ -316,7 +316,7 @@ to_string_async (std::streamsize precision) const  {
 
 template<typename I, typename H>
 template<typename ... Ts>
-std::future<std::string> DataFrame<I, H>::
+hmdf::future<std::string> DataFrame<I, H>::
 serialize_async () const  {
 
     return (thr_pool_.dispatch(true, &DataFrame::serialize<Ts ...>, this));

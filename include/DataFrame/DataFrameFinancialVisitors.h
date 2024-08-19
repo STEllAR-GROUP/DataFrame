@@ -33,11 +33,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/DataFrameStatsVisitors.h>
 #include <DataFrame/DataFrameTypes.h>
 #include <DataFrame/Utils/MetaProg.h>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
 
 #include <algorithm>
 #include <cmath>
 #include <functional>
-#include <future>
 #include <iterator>
 #include <limits>
 #include <numeric>
@@ -244,7 +244,7 @@ public:
         size_type   re_count2 = 0;
 
         if (thread_level_ > 2)  {
-            std::future<size_type>  fut1 =
+            hmdf::future<size_type>  fut1 =
                 ThreadGranularity::thr_pool_.dispatch(
                     false,
                     &DoubleCrossOver::run_short_roller_<K, H>,
@@ -253,7 +253,7 @@ public:
                         std::cref(idx_end),
                         std::cref(prices_begin),
                         std::cref(prices_end));
-            std::future<size_type>  fut2 =
+            hmdf::future<size_type>  fut2 =
                 ThreadGranularity::thr_pool_.dispatch(
                     false,
                     &DoubleCrossOver::run_long_roller_<K, H>,
@@ -401,7 +401,7 @@ public:
                      ? 0L : ThreadGranularity::get_thread_level();
 
         if (thread_level > 2)  {
-            std::future<void>   fut1 =
+            hmdf::future<void>   fut1 =
                 ThreadGranularity::thr_pool_.dispatch(
                     false,
                     &BollingerBand::run_mean_roller_<K, H>,
@@ -410,7 +410,7 @@ public:
                         std::cref(idx_end),
                         std::cref(prices_begin),
                         std::cref(prices_end));
-            std::future<void>   fut2 =
+            hmdf::future<void>   fut2 =
                 ThreadGranularity::thr_pool_.dispatch(
                     false,
                     &BollingerBand::run_std_roller_<K, H>,

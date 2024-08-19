@@ -862,7 +862,7 @@ public:
         result_type result (col_s);
 
         if (thread_level_ > 2 && col_s >= ThreadPool::MUL_THR_THHOLD)  {
-            std::vector<std::future<void>>  futures;
+            std::vector<hmdf::future<void>>  futures;
 
             if constexpr (is_complex<T>::value)  {
                 futures =
@@ -1491,7 +1491,7 @@ public:
 
         if (col_s >= ThreadPool::MUL_THR_THHOLD &&
             ThreadGranularity::get_thread_level() > 2)  {
-            std::vector<std::future<void>>  futures;
+            std::vector<hmdf::future<void>>  futures;
 
             result_.resize(col_s);
             if (rtype_ == rectify_type::ReLU)  {
@@ -1839,7 +1839,7 @@ public:
 
         if (col_s >= ThreadPool::MUL_THR_THHOLD &&
             ThreadGranularity::get_thread_level() > 2)  {
-            std::vector<std::future<void>>  futures;
+            std::vector<hmdf::future<void>>  futures;
 
             if (lft_ == loss_function_type::kullback_leibler)  {
                 auto    futures =

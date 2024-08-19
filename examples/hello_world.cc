@@ -25,6 +25,10 @@ DAMAGE.
 #include <DataFrame/DataFrameStatsVisitors.h>      // Statistical algorithms
 #include <DataFrame/Utils/DateTime.h>              // Cool and handy date-time object
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <iostream>
 
 // -----------------------------------------------------------------------------

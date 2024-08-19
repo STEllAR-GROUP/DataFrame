@@ -1179,7 +1179,7 @@ sort(const char *name1, sort_spec dir1,
 
 template<typename I, typename H>
 template<typename T, typename ...Ts>
-std::future<void>
+hmdf::future<void>
 DataFrame<I, H>::
 sort_async(const char *name, sort_spec dir,
            bool ignore_index)  {
@@ -1195,7 +1195,7 @@ sort_async(const char *name, sort_spec dir,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename ... Ts>
-std::future<void>
+hmdf::future<void>
 DataFrame<I, H>::
 sort_async(const char *name1, sort_spec dir1,
            const char *name2, sort_spec dir2,
@@ -1215,7 +1215,7 @@ sort_async(const char *name1, sort_spec dir1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename ... Ts>
-std::future<void>
+hmdf::future<void>
 DataFrame<I, H>::
 sort_async(const char *name1, sort_spec dir1,
            const char *name2, sort_spec dir2,
@@ -1237,7 +1237,7 @@ sort_async(const char *name1, sort_spec dir1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename ... Ts>
-std::future<void>
+hmdf::future<void>
 DataFrame<I, H>::
 sort_async(const char *name1, sort_spec dir1,
            const char *name2, sort_spec dir2,
@@ -1262,7 +1262,7 @@ sort_async(const char *name1, sort_spec dir1,
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename T5,
          typename ... Ts>
-std::future<void>
+hmdf::future<void>
 DataFrame<I, H>::
 sort_async(const char *name1, sort_spec dir1,
            const char *name2, sort_spec dir2,

@@ -31,6 +31,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/Utils/FixedSizePriorityQueue.h>
 #include <DataFrame/Utils/FixedSizeString.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <cassert>
 #include <cstdlib>
 #include <iostream>

@@ -11,6 +11,7 @@ project(DataFrame VERSION 3.0.0 LANGUAGES CXX)
 option(HMDF_TESTING "Enable testing" OFF)
 option(HMDF_EXAMPLES "Build Examples" OFF)
 option(HMDF_BENCHMARKS "Build Benchmarks" OFF)
+option(HMDF_HPX "Use HPX as threading backend" OFF)
 
 if(HMDF_TESTING)
     enable_testing()
@@ -18,6 +19,12 @@ endif()
 
 if(HMDF_SANITY_EXCEPTIONS)
     add_compile_definitions(HMDF_SANITY_EXCEPTIONS)
+endif()
+
+if(HMDF_HPX)
+    find_package(HPX REQUIRED)
+    add_compile_definitions(HMDF_HPX)
+    add_compile_definitions($<$<CXX_COMPILER_ID:MSVC>:NOMINMAX>)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -49,10 +56,10 @@ target_compile_definitions(
 )
 target_compile_options(
     DataFrame
-    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/bigobj>
-            $<$<CXX_COMPILER_ID:MSVC>:/wd4251>
+    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:/wd4251>
     # TODO: fix these warnings
-    PUBLIC $<$<CXX_COMPILER_ID:MSVC>:/wd4244>
+    PUBLIC $<$<CXX_COMPILER_ID:MSVC>:/bigobj>
+           $<$<CXX_COMPILER_ID:MSVC>:/wd4244>
            $<$<CXX_COMPILER_ID:MSVC>:/wd4267>
            $<$<CXX_COMPILER_ID:MSVC>:/wd4996>
 )
@@ -60,7 +67,9 @@ set_target_properties(
     DataFrame
     PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR}
 )
-
+if(HMDF_HPX)
+    target_link_libraries(DataFrame PUBLIC HPX::hpx)
+endif()
 if(BUILD_SHARED_LIBS)
     set_target_properties(
         DataFrame

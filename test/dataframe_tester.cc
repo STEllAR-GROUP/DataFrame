@@ -32,6 +32,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/DataFrameStatsVisitors.h>
 #include <DataFrame/RandGen.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <cassert>
 #include <chrono>
 #include <cmath>
@@ -393,7 +397,7 @@ static void test_haphazard()  {
 
     std::cout << "\nTesting Async write ..." << std::endl;
 
-    std::future<bool>   fut2 =
+    hmdf::future<bool>   fut2 =
         dfx.write_async<std::ostream,
                         int,
                         unsigned long,
@@ -413,7 +417,7 @@ static void test_haphazard()  {
 
     std::cout << "\nTesting Async sort 2 ..." << std::endl;
 
-    std::future<void>   sort_fut =
+    hmdf::future<void>   sort_fut =
         dfx.sort_async<MyDataFrame::IndexType,
                        int, double, std::string, unsigned int>
             (DF_INDEX_COL_NAME, sort_spec::ascen);
@@ -521,7 +525,7 @@ static void test_read()  {
     MyDataFrame df_read;
 
     try  {
-        std::future<bool>   fut2 = df_read.read_async("sample_data.csv");
+        hmdf::future<bool>   fut2 = df_read.read_async("sample_data.csv");
 
         fut2.get();
     }
@@ -3764,12 +3768,12 @@ static void test_thread_safety()  {
     };
 
     SpinLock                    lock;
-    StlVecType<std::thread>    thr_vec;
+    StlVecType<hmdf::thread>    thr_vec;
 
     MyDataFrame::set_lock(&lock);
 
     for (size_t i = 0; i < 20; ++i)
-        thr_vec.push_back(std::thread(do_work));
+        thr_vec.push_back(hmdf::thread(do_work));
     for (size_t i = 0; i < 20; ++i)
         thr_vec[i].join();
 

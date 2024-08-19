@@ -30,6 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #pragma once
 
 #include <DataFrame/Utils/Threads/ThreadPool.h>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
 
 #include <atomic>
 #include <cassert>
@@ -50,7 +51,7 @@ struct  ThreadGranularity  {
     }
     static inline void set_optimum_thread_level()  {
 
-        set_thread_level(std::thread::hardware_concurrency());
+        set_thread_level(hmdf::thread::hardware_concurrency());
     }
     static inline size_type get_thread_level()  {
 
@@ -75,7 +76,7 @@ struct  SpinLock  {
 
     inline void lock() noexcept {
 
-        const std::thread::id   thr_id = std::this_thread::get_id();
+        const hmdf::thread::id   thr_id = hmdf::this_thread::get_id();
 
         if (thr_id != owner_) [[likely]]  {
 #ifdef __cpp_lib_atomic_flag_test
@@ -93,7 +94,7 @@ struct  SpinLock  {
     }
     [[nodiscard]] inline bool try_lock() noexcept {
 
-        const std::thread::id   thr_id = std::this_thread::get_id();
+        const hmdf::thread::id   thr_id = hmdf::this_thread::get_id();
 
         if (thr_id == owner_ ||
             ! lock_.test_and_set(std::memory_order_acquire))  {
@@ -105,14 +106,14 @@ struct  SpinLock  {
     }
     inline void unlock() noexcept {
 
-        const std::thread::id   thr_id = std::this_thread::get_id();
+        const hmdf::thread::id   thr_id = hmdf::this_thread::get_id();
 
         if (thr_id == owner_) [[likely]]  {
             count_ -= 1;
 
             assert(count_ >= 0);
             if (count_ == 0)  {
-                owner_ = std::thread::id { };
+                owner_ = hmdf::thread::id { };
                 lock_.clear(std::memory_order_release);
             }
         }
@@ -125,7 +126,7 @@ struct  SpinLock  {
 private:
 
     std::atomic_flag    lock_ = ATOMIC_FLAG_INIT;
-    std::thread::id     owner_ { };
+    hmdf::thread::id    owner_ { };
     int                 count_ { 0 };
 };
 

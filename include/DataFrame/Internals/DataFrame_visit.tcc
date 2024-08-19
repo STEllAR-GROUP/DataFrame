@@ -27,7 +27,8 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <future>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
+
 #include <ranges>
 #include <tuple>
 
@@ -166,7 +167,7 @@ visit (const char *name, V &visitor, bool in_reverse) const  {
 
 template<typename I, typename H>
 template<typename T, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name, V &visitor, bool in_reverse)  {
 
     return (thr_pool_.dispatch(
@@ -183,7 +184,7 @@ visit_async(const char *name, V &visitor, bool in_reverse)  {
 
 template<typename I, typename H>
 template<typename T, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name, V &visitor, bool in_reverse) const  {
 
     return (thr_pool_.dispatch(
@@ -264,7 +265,7 @@ visit (const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             V &visitor,
@@ -285,7 +286,7 @@ visit_async(const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             V &visitor,
@@ -383,7 +384,7 @@ visit (const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             const char *name3,
@@ -410,7 +411,7 @@ visit_async(const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             const char *name3,
@@ -519,7 +520,7 @@ visit (const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             const char *name3,
@@ -549,7 +550,7 @@ visit_async(const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             const char *name3,
@@ -673,7 +674,7 @@ visit (const char *name1,
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename T5,
          typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             const char *name3,
@@ -707,7 +708,7 @@ visit_async(const char *name1,
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename T5,
          typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 visit_async(const char *name1,
             const char *name2,
             const char *name3,
@@ -770,7 +771,7 @@ single_act_visit (const char *name, V &visitor, bool in_reverse) const  {
 
 template<typename I, typename H>
 template<typename T, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name, V &visitor, bool in_reverse)  {
 
     return (thr_pool_.dispatch(
@@ -787,7 +788,7 @@ single_act_visit_async(const char *name, V &visitor, bool in_reverse)  {
 
 template<typename I, typename H>
 template<typename T, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name, V &visitor, bool in_reverse) const  {
 
     return (thr_pool_.dispatch(
@@ -833,7 +834,7 @@ single_act_visit (const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        V &visitor,
@@ -868,7 +869,7 @@ single_act_visit (const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        V &visitor,
@@ -940,7 +941,7 @@ single_act_visit (const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        const char *name3,
@@ -967,7 +968,7 @@ single_act_visit_async(const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        const char *name3,
@@ -1047,7 +1048,7 @@ single_act_visit (const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        const char *name3,
@@ -1077,7 +1078,7 @@ single_act_visit_async(const char *name1,
 
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        const char *name3,
@@ -1169,7 +1170,7 @@ single_act_visit (const char *name1,
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename T5,
          typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        const char *name3,
@@ -1203,7 +1204,7 @@ single_act_visit_async(const char *name1,
 template<typename I, typename H>
 template<typename T1, typename T2, typename T3, typename T4, typename T5,
          typename V>
-std::future<V &> DataFrame<I, H>::
+hmdf::future<V &> DataFrame<I, H>::
 single_act_visit_async(const char *name1,
                        const char *name2,
                        const char *name3,

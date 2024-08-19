@@ -29,18 +29,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
 
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
 #include <DataFrame/Utils/Threads/SharedQueue.h>
 
 #include <atomic>
 #include <concepts>
-#include <condition_variable>
 #include <functional>
-#include <future>
 #include <iterator>
 #include <list>
-#include <mutex>
 #include <ranges>
-#include <thread>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -56,12 +53,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 namespace hmdf
 {
 
+//#ifndef HMDF_HPX
+
 class   ThreadPool  {
 
 public:
 
     using size_type = long;
-    using thread_type = std::thread;
+    using thread_type = hmdf::thread;
 
     inline static constexpr size_type   MUL_THR_THHOLD = 250'000L;
 
@@ -69,32 +68,32 @@ public:
     ThreadPool &operator = (const ThreadPool &) = delete;
 
     explicit
-    ThreadPool(size_type thr_num = std::thread::hardware_concurrency());
+    ThreadPool(size_type thr_num = hmdf::thread::hardware_concurrency());
     ~ThreadPool();
 
     template<typename F, typename ... As>
     requires std::invocable<F, As ...>
     using dispatch_res_t =
-        std::future<std::invoke_result_t<std::decay_t<F>,
+        hmdf::future<std::invoke_result_t<std::decay_t<F>,
                                          std::decay_t<As> ...>>;
 
     template<typename F, typename I, typename ... As>
     requires std::invocable<F, I, I, As ...>
     using loop_res_t =
-        std::vector<std::future<std::invoke_result_t<std::decay_t<F>,
+        std::vector<hmdf::future<std::invoke_result_t<std::decay_t<F>,
                                                      std::decay_t<I>,
                                                      std::decay_t<I>,
                                                      std::decay_t<As> ...>>>;
     template<typename F, typename I1, typename I2, typename ... As>
     requires std::invocable<F, I1, I1, I2, As ...>
     using loop2_res_t =
-        std::vector<std::future<std::invoke_result_t<std::decay_t<F>,
+        std::vector<hmdf::future<std::invoke_result_t<std::decay_t<F>,
                                                      std::decay_t<I1>,
                                                      std::decay_t<I1>,
                                                      std::decay_t<I2>,
                                                      std::decay_t<As> ...>>>;
 
-    // The return type of dispatch is std::future of return type of routine
+    // The return type of dispatch is hmdf::future of return type of routine
     //
     template<typename F, typename ... As>
     dispatch_res_t<F, As ...>
@@ -165,7 +164,7 @@ private:
     bool thread_routine_(size_type local_q_idx) noexcept;  // Engine routine
     WorkUnit get_one_local_task_() noexcept;
 
-    using guard_type = std::lock_guard<std::mutex>;
+    using guard_type = std::lock_guard<hmdf::mutex>;
     using GlobalQueueType = SharedQueue<WorkUnit>;
     using LocalQueueType = std::queue<WorkUnit>;
 
@@ -181,15 +180,21 @@ private:
     std::atomic<size_type>  available_threads_ { 0 };
     std::atomic<size_type>  capacity_threads_ { 0 };
     std::atomic_bool        shutdown_flag_ { false };
-    mutable std::mutex      state_ { };
+    mutable hmdf::mutex      state_ { };
 };
+
+//#else
+//
+//#endif
 
 } // namespace hmdf
 
 // ----------------------------------------------------------------------------
 
 #ifndef HMDF_DO_NOT_INCLUDE_TCC_FILES
+//#ifndef HMDF_HPX
 #  include <DataFrame/Utils/Threads/ThreadPool.tcc>
+//#endif // HMDF_HPX
 #endif // HMDF_DO_NOT_INCLUDE_TCC_FILES
 
 // ----------------------------------------------------------------------------

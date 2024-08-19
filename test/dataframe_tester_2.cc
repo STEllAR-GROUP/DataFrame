@@ -32,6 +32,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/DataFrameTransformVisitors.h>
 #include <DataFrame/RandGen.h>
 
+#ifdef HMDF_HPX
+#include <hpx/hpx_main.hpp>
+#endif
+
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -4288,7 +4292,7 @@ static void test_AccumDistVisitor()  {
 
         ad_v<double, std::string, 64>   ad;
 
-        std::future<ad_v<double, std::string, 64> &>   fut =
+        hmdf::future<ad_v<double, std::string, 64> &>   fut =
             df.single_act_visit_async<double, double, double, double, long>
             ("IBM_Low", "IBM_High", "IBM_Open", "IBM_Close", "IBM_Volume", ad);
 
@@ -4322,7 +4326,7 @@ static void test_ChaikinMoneyFlowVisitor()  {
 
         cmf_v<double, std::string, 64>  cmf;
 
-        std::future<cmf_v<double, std::string, 64> &>   fut =
+        hmdf::future<cmf_v<double, std::string, 64> &>   fut =
             df.single_act_visit_async<double, double, double, double, long>
             ("IBM_Low", "IBM_High", "IBM_Open", "IBM_Close", "IBM_Volume", cmf);
 
@@ -4389,7 +4393,7 @@ static void test_OnBalanceVolumeVisitor()  {
 
         obv_v<double, std::string, 64>  obv;
 
-        std::future<obv_v<double, std::string, 64> &>   fut =
+        hmdf::future<obv_v<double, std::string, 64> &>   fut =
             df.single_act_visit_async<double, long>
             ("IBM_Close", "IBM_Volume", obv);
 
@@ -4424,7 +4428,7 @@ static void test_TrueRangeVisitor()  {
 
         TrueRangeVisitor<double, std::string, 64>   tr;
 
-        std::future<TrueRangeVisitor<double, std::string, 64> &>    fut =
+        hmdf::future<TrueRangeVisitor<double, std::string, 64> &>    fut =
             df.single_act_visit_async<double, double, double>
             ("IBM_Low", "IBM_High", "IBM_Close", tr);
 
@@ -4443,7 +4447,7 @@ static void test_TrueRangeVisitor()  {
 
         TrueRangeVisitor<double, std::string, 64>   tr2 (true, 14, true);
 
-        std::future<TrueRangeVisitor<double, std::string, 64> &>    fut2 =
+        hmdf::future<TrueRangeVisitor<double, std::string, 64> &>    fut2 =
             df.single_act_visit_async<double, double, double>
             ("IBM_Low", "IBM_High", "IBM_Close", tr2);
 

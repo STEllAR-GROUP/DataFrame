@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <DataFrame/Utils/Concepts.h>
 #include <DataFrame/Utils/FixedSizePriorityQueue.h>
 #include <DataFrame/Utils/Threads/ThreadGranularity.h>
+#include <DataFrame/Utils/Threads/ThreadWrappers.h>
 #include <DataFrame/Utils/Utils.h>
 
 #include <algorithm>
@@ -47,7 +48,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif // M_PI
 #include <cstddef>
 #include <functional>
-#include <future>
 #include <iterator>
 #include <limits>
 #include <map>
@@ -2092,7 +2092,7 @@ public:
 
         if (col_s >= ThreadPool::MUL_THR_THHOLD &&
             ThreadGranularity::get_thread_level() > 2)  {
-            std::vector<std::future<void>>  futures;
+            std::vector<hmdf::future<void>>  futures;
 
             if (! related_ts_)  {
                 auto    lbd =
@@ -2617,7 +2617,7 @@ public:
         tmp_result[0] = 1.0;
         if (col_s >= ThreadPool::MUL_THR_THHOLD &&
             ThreadGranularity::get_thread_level() > 2)  {
-            vec_type<std::future<CorrResult>>   futures;
+            vec_type<hmdf::future<CorrResult>>   futures;
 
             futures.reserve((col_s - 4) - lag);
             while (lag < col_s - 4)  {
@@ -7222,7 +7222,7 @@ private:
         residual_.resize(col_s, 0);
         if (detrended.size() >= ThreadPool::MUL_THR_THHOLD &&
             ThreadGranularity::get_thread_level() > 2)  {
-            std::vector<std::future<void>>  futures;
+            std::vector<hmdf::future<void>>  futures;
 
             if (type_ == decompose_type::additive)
                 futures =
@@ -7295,7 +7295,7 @@ public:
         //
         if (col_s >= ThreadPool::MUL_THR_THHOLD &&
             ThreadGranularity::get_thread_level() > 2)  {
-            std::vector<std::future<void>>  futures;
+            std::vector<hmdf::future<void>>  futures;
 
             if (type_ == decompose_type::additive)
                 futures =
